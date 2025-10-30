@@ -1,0 +1,15 @@
+Reporte de Clasificación del Modelo VGG16 (Final - Weighted y Fine-Tuned)
+============================================================
+Precisión Global en el Set de Prueba: 80.20%
+Pérdida Global en el Set de Prueba: 1.5205
+
+                  precision    recall  f1-score   support
+
+    glioma_tumor       0.93      0.39      0.55       100
+meningioma_tumor       0.71      0.97      0.82       115
+        no_tumor       0.79      0.94      0.86       105
+ pituitary_tumor       0.96      0.91      0.93        74
+
+        accuracy                           0.80       394
+       macro avg       0.85      0.80      0.79       394
+    weighted avg       0.83      0.80      0.78       394

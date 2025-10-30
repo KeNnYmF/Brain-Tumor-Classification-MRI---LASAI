@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clasificador de Tumores Cerebrales (MRI)</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Clasificador de Tumores Cerebrales (MRI)</h1>
+        <p>Sube una imagen MRI para clasificarla en una de las 4 categorías:</p>
+        <p><strong>glioma_tumor, meningioma_tumor, no_tumor, pituitary_tumor</strong></p>
+
+        <div class="uploader-container">
+            <input type="file" id="imageUploader" accept="image/jpeg, image/png">
+            <label for="imageUploader" class="uploader-label">Seleccionar Imagen</label>
+        </div>
+        
+        <button id="predictButton">Clasificar</button>
+
+        <div id="result" class="result-container">
+            <img id="imagePreview" src="" alt="Vista previa de la imagen">
+            <h2 id="resultText"></h2>
+        </div>
+        
+        <div id="loading" class="hidden">
+            <div class="spinner"></div>
+            <p>Clasificando...</p>
+        </div>
+    </div>
+
+    <script>
+        
+        const imageUploader = document.getElementById('imageUploader');
+        const predictButton = document.getElementById('predictButton');
+        const resultDiv = document.getElementById('result');
+        const resultText = document.getElementById('resultText');
+        const imagePreview = document.getElementById('imagePreview');
+        const loadingDiv = document.getElementById('loading');
+
+        let selectedFile;
+
+        imageUploader.addEventListener('change', (event) => {
+            selectedFile = event.target.files[0];
+            if (selectedFile) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                    resultText.innerText = ''; 
+                };
+                reader.readAsDataURL(selectedFile);
+            }
+        });
+
+       
+        predictButton.addEventListener('click', async () => {
+            if (!selectedFile) {
+                alert('Por favor, selecciona una imagen primero.');
+                return;
+            }
+
+            
+            loadingDiv.classList.remove('hidden');
+            resultDiv.classList.add('hidden');
+            resultText.innerText = '';
+
+            
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            try {
+        
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                
+                if (response.ok) {
+                    resultText.innerText = `Resultado: ${data.class} (${data.confidence})`;
+                } else {
+                    resultText.innerText = `Error: ${data.error}`;
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                resultText.innerText = 'Error: No se pudo conectar con el servidor.';
+            } finally {
+              
+                loadingDiv.classList.add('hidden');
+                resultDiv.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
