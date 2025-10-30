@@ -117,6 +117,25 @@ Confirma el desafío de la clase **glioma_tumor**: de 100 casos verdaderos (fila
 Esta confusión inter-clase es la principal limitación del modelo actual y el factor que reduce la precisión global.
 
 ---
+## 📁 Estructura del Repositorio
+
+```bash
+.
+├── dataset/
+│   ├── Training/
+│   └── Testing/
+├── static/
+│   └── style.css
+├── templates/
+│   └── index.html
+├── brain_tumor_vgg16_final.keras
+├── app.py                 # Servidor web 
+├── train.py               # Script para entrenar el modelo
+├── requirements.txt       # Dependencias del proyecto
+├── classification_report_final.txt
+├── confusion_matrix_final.png
+└── training_metrics_plot_final.png
+```
 
 ## ⚙️ Instalación
 
